@@ -17,7 +17,7 @@ class CaranaGame extends FlameGame with HasDraggables {
     final knobPaint = BasicPalette.black.withAlpha(200).paint();
     final backgroundPaint = BasicPalette.white.withAlpha(160).paint();
 
-    await Flame.images.loadAll([tileMapPath, playerHeloizaPath]);
+    await Flame.images.loadAll([tileMapPath, playerBrendaPath]);
 
     background = SpriteComponent()
       ..sprite = await loadSprite(tileMapPath)

@@ -15,7 +15,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   stopedAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerHeloizaPath),
+      game.images.fromCache(playerBrendaPath),
       SpriteAnimationData.range(
         start: 4,
         end: 7,
@@ -30,7 +30,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   walkLeftAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerHeloizaPath),
+      game.images.fromCache(playerBrendaPath),
       SpriteAnimationData.range(
         start: 24,
         end: 27,
@@ -45,7 +45,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   walkRightAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerHeloizaPath),
+      game.images.fromCache(playerBrendaPath),
       SpriteAnimationData.range(
         start: 28,
         end: 31,
@@ -60,7 +60,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   walkDownAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerHeloizaPath),
+      game.images.fromCache(playerBrendaPath),
       SpriteAnimationData.range(
         start: 20,
         end: 23,
@@ -75,7 +75,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   walkUpAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerHeloizaPath),
+      game.images.fromCache(playerBrendaPath),
       SpriteAnimationData.range(
         start: 16,
         end: 19,
