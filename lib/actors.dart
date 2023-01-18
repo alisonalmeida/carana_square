@@ -3,18 +3,85 @@ import 'package:carana_square/consts.dart';
 import 'package:flame/components.dart';
 
 class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
-  Player({
-    required super.position,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center);
+  Player({required super.position})
+      : super(size: Vector2.all(64), anchor: Anchor.center);
+  List<double> stepTimes = [0.05, 0.05, 0.05, 0.05];
+  double velocity = 200;
 
   @override
   Future<void> onLoad() async {
+    stopedAnimation();
+  }
+
+  stopedAnimation() {
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(playerHeloizaPath),
-      SpriteAnimationData.sequenced(
+      SpriteAnimationData.range(
+        start: 4,
+        end: 7,
+        stepTimes: stepTimes,
         amountPerRow: 4,
-        amount: 4, //max32
-        stepTime: 0.2,
+        amount: 8, //max32
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2.all(4),
+      ),
+    );
+  }
+
+  walkLeftAnimation() {
+    animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache(playerHeloizaPath),
+      SpriteAnimationData.range(
+        start: 24,
+        end: 27,
+        stepTimes: stepTimes,
+        amountPerRow: 4,
+        amount: 28, //max32
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2.all(4),
+      ),
+    );
+  }
+
+  walkRightAnimation() {
+    animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache(playerHeloizaPath),
+      SpriteAnimationData.range(
+        start: 28,
+        end: 31,
+        stepTimes: stepTimes,
+        amountPerRow: 4,
+        amount: 32, //max32
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2.all(4),
+      ),
+    );
+  }
+
+  walkDownAnimation() {
+    animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache(playerHeloizaPath),
+      SpriteAnimationData.range(
+        start: 20,
+        end: 23,
+        stepTimes: stepTimes,
+        amountPerRow: 4,
+        amount: 24, //max32
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2.all(4),
+      ),
+    );
+  }
+
+  walkUpAnimation() {
+    animation = SpriteAnimation.fromFrameData(
+      game.images.fromCache(playerHeloizaPath),
+      SpriteAnimationData.range(
+        start: 16,
+        end: 19,
+        stepTimes: stepTimes,
+        amountPerRow: 4,
+        amount: 20, //max32
         textureSize: Vector2.all(32),
         texturePosition: Vector2.all(4),
       ),
@@ -24,44 +91,71 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    final bool moveLeft = gameRef.joystick.direction == JoystickDirection.left;
-    final bool moveRight =
-        gameRef.joystick.direction == JoystickDirection.right;
-    final bool moveUp = gameRef.joystick.direction == JoystickDirection.up;
-    final bool moveDown = gameRef.joystick.direction == JoystickDirection.down;
-    final bool moveDownLeft = gameRef.joystick.direction == JoystickDirection.downLeft;
-    final bool moveUpLeft =
-        gameRef.joystick.direction == JoystickDirection.upLeft;
-        final bool moveDownRight =
-        gameRef.joystick.direction == JoystickDirection.downRight;
-    final bool moveUpRight =
-        gameRef.joystick.direction == JoystickDirection.upRight;
-
 
     final double playerVectorX =
-        (gameRef.joystick.relativeDelta * 300 * dt)[0];
+        (gameRef.joystick.relativeDelta * velocity * dt)[0];
     final double playerVectorY =
-        (gameRef.joystick.relativeDelta * 300 * dt)[1];
+        (gameRef.joystick.relativeDelta * velocity * dt)[1];
 
+    switch (gameRef.joystick.direction) {
+      case JoystickDirection.idle:
+        if (animation!.isLastFrame) {
+          stopedAnimation();
+        }
+        break;
+      case JoystickDirection.left:
+        if (animation!.isLastFrame) {
+          walkLeftAnimation();
+        }
+        x += playerVectorX;
+        break;
+      case JoystickDirection.downLeft:
+        if (animation!.isLastFrame) {
+          walkLeftAnimation();
+        }
+        x += playerVectorX;
+        y += playerVectorY;
+        break;
+      case JoystickDirection.upLeft:
+        if (animation!.isLastFrame) {
+          walkLeftAnimation();
+        }
+        x += playerVectorX;
+        break;
+      case JoystickDirection.right:
+        if (animation!.isLastFrame) {
+          walkRightAnimation();
+        }
+        x += playerVectorX;
+        break;
+      case JoystickDirection.upRight:
+        if (animation!.isLastFrame) {
+          walkRightAnimation();
+        }
+        x += playerVectorX;
+        y += playerVectorY;
+        break;
+      case JoystickDirection.downRight:
+        if (animation!.isLastFrame) {
+          walkRightAnimation();
+        }
+        x += playerVectorX;
+        y += playerVectorY;
+        break;
 
-    //  is moving left
-    if (moveLeft && x > 0) {
-      x += playerVectorX;
+      case JoystickDirection.down:
+        if (animation!.isLastFrame) {
+          walkDownAnimation();
+        }
+        y += playerVectorY;
+        break;
+      case JoystickDirection.up:
+        if (animation!.isLastFrame) {
+          walkUpAnimation();
+        }
+        y += playerVectorY;
+        break;
+      default:
     }
-//  is moving right
-    if (moveRight && x < gameRef.size[0]) {
-      x += playerVectorX;
-    }
-
-    // s moving up
-    if (moveUp && y > 0) {
-      y += playerVectorY;
-    }
-
-    //  moving down
-    if (moveDown && y < gameRef.size[1] - height) {
-      y += playerVectorY;
-    }
-    
   }
 }
