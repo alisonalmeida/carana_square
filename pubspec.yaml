@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.6.0
+  flame_tiled: ^1.9.1
   flutter:
     sdk: flutter
 
@@ -21,7 +22,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/tiles/

@@ -1,3 +1,3 @@
-String tileMapPath = 'tiled_map.png';
+String tileMapPath = 'home_map.tmx';
 String playerHeloizaPath = 'heloiza.png';
 String playerBrendaPath = 'brenda.png';

@@ -5,8 +5,13 @@ import 'package:flame/components.dart';
 class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
   Player({required super.position})
       : super(size: Vector2.all(64), anchor: Anchor.center);
-  List<double> stepTimes = [0.05, 0.05, 0.05, 0.05];
+
+  bool isRunning = false;
+  List<double> runningStepTimes = [0.05, 0.05, 0.05, 0.05];
+  List<double> walkingStepTimes = [0.1, 0.1, 0.1, 0.1];
+
   double velocity = 200;
+  String selectedPlayer = playerBrendaPath;
 
   @override
   Future<void> onLoad() async {
@@ -15,26 +20,26 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   stopedAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerBrendaPath),
+      game.images.fromCache(selectedPlayer),
       SpriteAnimationData.range(
         start: 4,
         end: 7,
-        stepTimes: stepTimes,
+        stepTimes: [0.05, 0.05, 0.05, 0.05],
         amountPerRow: 4,
         amount: 8, //max32
         textureSize: Vector2.all(32),
-        texturePosition: Vector2.all(4),
+        texturePosition: Vector2.all(2),
       ),
     );
   }
 
-  walkLeftAnimation() {
+  toLeftAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerBrendaPath),
+      game.images.fromCache(selectedPlayer),
       SpriteAnimationData.range(
         start: 24,
         end: 27,
-        stepTimes: stepTimes,
+        stepTimes: isRunning ? runningStepTimes : walkingStepTimes,
         amountPerRow: 4,
         amount: 28, //max32
         textureSize: Vector2.all(32),
@@ -43,13 +48,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
     );
   }
 
-  walkRightAnimation() {
+  toRightAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerBrendaPath),
+      game.images.fromCache(selectedPlayer),
       SpriteAnimationData.range(
         start: 28,
         end: 31,
-        stepTimes: stepTimes,
+        stepTimes: isRunning ? runningStepTimes : walkingStepTimes,
         amountPerRow: 4,
         amount: 32, //max32
         textureSize: Vector2.all(32),
@@ -58,13 +63,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
     );
   }
 
-  walkDownAnimation() {
+  toDownAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerBrendaPath),
+      game.images.fromCache(selectedPlayer),
       SpriteAnimationData.range(
         start: 20,
         end: 23,
-        stepTimes: stepTimes,
+        stepTimes: isRunning ? runningStepTimes : walkingStepTimes,
         amountPerRow: 4,
         amount: 24, //max32
         textureSize: Vector2.all(32),
@@ -73,13 +78,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
     );
   }
 
-  walkUpAnimation() {
+  toUpAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(playerBrendaPath),
+      game.images.fromCache(selectedPlayer),
       SpriteAnimationData.range(
         start: 16,
         end: 19,
-        stepTimes: stepTimes,
+        stepTimes: isRunning ? runningStepTimes : walkingStepTimes,
         amountPerRow: 4,
         amount: 20, //max32
         textureSize: Vector2.all(32),
@@ -96,6 +101,14 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
         (gameRef.joystick.relativeDelta * velocity * dt)[0];
     final double playerVectorY =
         (gameRef.joystick.relativeDelta * velocity * dt)[1];
+    if (gameRef.joystick.relativeDelta[0] > 0.6 ||
+        gameRef.joystick.relativeDelta[0] < -0.6 ||
+        gameRef.joystick.relativeDelta[1] > 0.6 ||
+        gameRef.joystick.relativeDelta[1] < -0.6) {
+      isRunning = true;
+    } else {
+      isRunning = false;
+    }
 
     switch (gameRef.joystick.direction) {
       case JoystickDirection.idle:
@@ -105,55 +118,85 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
         break;
       case JoystickDirection.left:
         if (animation!.isLastFrame) {
-          walkLeftAnimation();
+          toLeftAnimation(isRunning);
         }
-        x += playerVectorX;
+
+        if (x > 32) {
+          x += playerVectorX;
+        }
+
         break;
       case JoystickDirection.downLeft:
         if (animation!.isLastFrame) {
-          walkLeftAnimation();
+          toLeftAnimation(isRunning);
         }
-        x += playerVectorX;
-        y += playerVectorY;
+        if (x > 32) {
+          x += playerVectorX;
+        }
+        if (y < gameRef.homeMap.size.y - 32) {
+          y += playerVectorY;
+        }
+
         break;
       case JoystickDirection.upLeft:
         if (animation!.isLastFrame) {
-          walkLeftAnimation();
+          toLeftAnimation(isRunning);
         }
-        x += playerVectorX;
+        if (x > 32) {
+          x += playerVectorX;
+        }
+        if (y > 32) {
+          y += playerVectorY;
+        }
         break;
       case JoystickDirection.right:
         if (animation!.isLastFrame) {
-          walkRightAnimation();
+          toRightAnimation(isRunning);
         }
-        x += playerVectorX;
+        if (x < gameRef.homeMap.size.x) {
+          x += playerVectorX;
+        }
         break;
       case JoystickDirection.upRight:
         if (animation!.isLastFrame) {
-          walkRightAnimation();
+          toRightAnimation(isRunning);
         }
-        x += playerVectorX;
-        y += playerVectorY;
+        if (x < gameRef.homeMap.size.x) {
+          x += playerVectorX;
+        }
+        if (y > 32) {
+          y += playerVectorY;
+        }
         break;
       case JoystickDirection.downRight:
         if (animation!.isLastFrame) {
-          walkRightAnimation();
+          toRightAnimation(isRunning);
         }
-        x += playerVectorX;
-        y += playerVectorY;
+        if (x < gameRef.homeMap.size.x) {
+          x += playerVectorX;
+        }
+        if (y < gameRef.homeMap.size.y - 32) {
+          y += playerVectorY;
+        }
         break;
 
       case JoystickDirection.down:
         if (animation!.isLastFrame) {
-          walkDownAnimation();
+          toDownAnimation(isRunning);
         }
-        y += playerVectorY;
+        if (y < gameRef.homeMap.size.y - 32) {
+          y += playerVectorY;
+        }
+
         break;
       case JoystickDirection.up:
         if (animation!.isLastFrame) {
-          walkUpAnimation();
+          toUpAnimation(isRunning);
         }
-        y += playerVectorY;
+
+        if (y > 32) {
+          y += playerVectorY;
+        }
         break;
       default:
     }
