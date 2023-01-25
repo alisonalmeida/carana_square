@@ -3,7 +3,6 @@ import 'package:carana_square/consts.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -11,19 +10,23 @@ import 'package:flame_tiled/flame_tiled.dart';
 class CaranaGame extends FlameGame with HasDraggables, HasTappables {
   CaranaGame();
   late Player _player;
-  late JoystickComponent joystick;
+  late JoystickComponent movementJoystick;
+  late JoystickComponent attackJoystick;
   late TiledComponent homeMap;
-  AttackButton attackButton = AttackButton();
   final Vector2 buttonSize = Vector2.all(50);
+  late NotifyingVector2 gameSize;
 
   @override
   Future<void> onLoad() async {
-    final knobPaint = BasicPalette.black.withAlpha(200).paint();
-    final backgroundPaint = BasicPalette.white.withAlpha(160).paint();
+    final knobMovementPaint = BasicPalette.black.withAlpha(200).paint();
+    final backgroundMovementPaint = BasicPalette.white.withAlpha(160).paint();
+    final knobAttackPaint = BasicPalette.darkRed.withAlpha(200).paint();
+    final backgroundAttackPaint = BasicPalette.white.withAlpha(160).paint();
 
     await Flame.images.loadAll([playerBrendaPath, playerHeloizaPath]);
 
     homeMap = await TiledComponent.load(tileMapPath, Vector2.all(64));
+    gameSize = homeMap.size;
 
     add(homeMap);
 
@@ -32,30 +35,19 @@ class CaranaGame extends FlameGame with HasDraggables, HasTappables {
     add(_player);
     camera.followComponent(_player);
 
-    joystick = JoystickComponent(
-      knob: CircleComponent(radius: 20, paint: knobPaint),
-      background: CircleComponent(radius: 50, paint: backgroundPaint),
+    movementJoystick = JoystickComponent(
+      knob: CircleComponent(radius: 20, paint: knobMovementPaint),
+      background: CircleComponent(radius: 50, paint: backgroundMovementPaint),
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
 
-    add(joystick);
-    attackButton
-      ..sprite = await loadSprite('attack_button_image.png')
-      ..size = buttonSize
-      ..position = Vector2(_player.x, _player.y);
-    add(attackButton);
-  }
-}
+    attackJoystick = JoystickComponent(
+      knob: CircleComponent(radius: 20, paint: knobAttackPaint),
+      background: CircleComponent(radius: 50, paint: backgroundAttackPaint),
+      margin: const EdgeInsets.only(right: 40, bottom: 40),
+    );
 
-class AttackButton extends SpriteComponent with Tappable {
-  @override
-  bool onTapDown(TapDownInfo event) {
-    try {
-      print('object');
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
+    add(movementJoystick);
+    add(attackJoystick);
   }
 }

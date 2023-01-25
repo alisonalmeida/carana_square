@@ -98,19 +98,19 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
     super.update(dt);
 
     final double playerVectorX =
-        (gameRef.joystick.relativeDelta * velocity * dt)[0];
+        (gameRef.movementJoystick.relativeDelta * velocity * dt)[0];
     final double playerVectorY =
-        (gameRef.joystick.relativeDelta * velocity * dt)[1];
-    if (gameRef.joystick.relativeDelta[0] > 0.6 ||
-        gameRef.joystick.relativeDelta[0] < -0.6 ||
-        gameRef.joystick.relativeDelta[1] > 0.6 ||
-        gameRef.joystick.relativeDelta[1] < -0.6) {
+        (gameRef.movementJoystick.relativeDelta * velocity * dt)[1];
+    if (gameRef.movementJoystick.relativeDelta[0] > 0.6 ||
+        gameRef.movementJoystick.relativeDelta[0] < -0.6 ||
+        gameRef.movementJoystick.relativeDelta[1] > 0.6 ||
+        gameRef.movementJoystick.relativeDelta[1] < -0.6) {
       isRunning = true;
     } else {
       isRunning = false;
     }
 
-    switch (gameRef.joystick.direction) {
+    switch (gameRef.movementJoystick.direction) {
       case JoystickDirection.idle:
         if (animation!.isLastFrame) {
           stopedAnimation();
