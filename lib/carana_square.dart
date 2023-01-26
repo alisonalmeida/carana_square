@@ -9,6 +9,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 
 class CaranaGame extends FlameGame with HasDraggables, HasTappables {
   CaranaGame();
+
   late Player _player;
   late JoystickComponent movementJoystick;
   late JoystickComponent attackJoystick;
@@ -18,6 +19,7 @@ class CaranaGame extends FlameGame with HasDraggables, HasTappables {
 
   @override
   Future<void> onLoad() async {
+   
     final knobMovementPaint = BasicPalette.black.withAlpha(200).paint();
     final backgroundMovementPaint = BasicPalette.white.withAlpha(160).paint();
     final knobAttackPaint = BasicPalette.darkRed.withAlpha(200).paint();
@@ -29,8 +31,7 @@ class CaranaGame extends FlameGame with HasDraggables, HasTappables {
     gameSize = homeMap.size;
 
     add(homeMap);
-
-    _player = Player(position: Vector2.all(32));
+    _player = Player(position: Vector2.all(32), playerPath: playerHeloizaPath);
 
     add(_player);
     camera.followComponent(_player);

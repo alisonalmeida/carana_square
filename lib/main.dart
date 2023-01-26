@@ -1,6 +1,5 @@
-import 'package:carana_square/carana_square.dart';
+import 'package:carana_square/home_page.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,7 +8,8 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await Flame.device.setLandscape();
 
-  runApp(
-    const GameWidget<CaranaGame>.controlled(gameFactory: CaranaGame.new),
-  );
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: HomePage(),
+  ));
 }

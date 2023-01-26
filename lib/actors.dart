@@ -1,17 +1,17 @@
 import 'package:carana_square/carana_square.dart';
-import 'package:carana_square/consts.dart';
 import 'package:flame/components.dart';
 
 class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
-  Player({required super.position})
+  Player({required super.position, required this.playerPath})
       : super(size: Vector2.all(64), anchor: Anchor.center);
+
+  String? playerPath;
 
   bool isRunning = false;
   List<double> runningStepTimes = [0.05, 0.05, 0.05, 0.05];
   List<double> walkingStepTimes = [0.1, 0.1, 0.1, 0.1];
 
   double velocity = 200;
-  String selectedPlayer = playerBrendaPath;
 
   @override
   Future<void> onLoad() async {
@@ -20,7 +20,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   stopedAnimation() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(selectedPlayer),
+      game.images.fromCache(playerPath!),
       SpriteAnimationData.range(
         start: 4,
         end: 7,
@@ -35,7 +35,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   toLeftAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(selectedPlayer),
+      game.images.fromCache(playerPath!),
       SpriteAnimationData.range(
         start: 24,
         end: 27,
@@ -50,7 +50,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   toRightAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(selectedPlayer),
+      game.images.fromCache(playerPath!),
       SpriteAnimationData.range(
         start: 28,
         end: 31,
@@ -65,7 +65,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   toDownAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(selectedPlayer),
+      game.images.fromCache(playerPath!),
       SpriteAnimationData.range(
         start: 20,
         end: 23,
@@ -80,7 +80,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
 
   toUpAnimation(bool isRunning) {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache(selectedPlayer),
+      game.images.fromCache(playerPath!),
       SpriteAnimationData.range(
         start: 16,
         end: 19,
