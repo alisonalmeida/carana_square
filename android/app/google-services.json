@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1002392156484",
+    "firebase_url": "https://hbgame-60c95-default-rtdb.firebaseio.com",
+    "project_id": "hbgame-60c95",
+    "storage_bucket": "hbgame-60c95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002392156484:android:39726108745e0874597f11",
+        "android_client_info": {
+          "package_name": "com.example.carana_square"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002392156484-k2obj2oc6d5kdh2rqammhbgoqnojif1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJhHPcs_7phWpMR9tYB8O4t68t1oQRv10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002392156484-k2obj2oc6d5kdh2rqammhbgoqnojif1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
