@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 class CaranaGame extends FlameGame with HasDraggables, HasTappables {
+  
   CaranaGame();
+
 
   late Player _player;
   late JoystickComponent movementJoystick;
