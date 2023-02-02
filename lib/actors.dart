@@ -1,7 +1,7 @@
-import 'package:carana_square/carana_square.dart';
+import 'package:carana_square/hbgame.dart';
 import 'package:flame/components.dart';
 
-class Player extends SpriteAnimationComponent with HasGameRef<CaranaGame> {
+class Player extends SpriteAnimationComponent with HasGameRef<HBGame> {
   Player({required super.position, required this.playerPath})
       : super(size: Vector2.all(64), anchor: Anchor.center);
 

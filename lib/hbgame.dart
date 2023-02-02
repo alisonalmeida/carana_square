@@ -8,10 +8,10 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-class CaranaGame extends FlameGame with HasDraggables, HasTappables {
-  CaranaGame();
+class HBGame extends FlameGame with HasDraggables, HasTappables {
+  HBGame({required this.player});
   late FirebaseAuth _auth;
-  late Player _player;
+  Player player;
   late JoystickComponent movementJoystick;
   late JoystickComponent attackJoystick;
   late TiledComponent homeMap;
@@ -32,10 +32,9 @@ class CaranaGame extends FlameGame with HasDraggables, HasTappables {
     gameSize = homeMap.size;
 
     add(homeMap);
-    _player = Player(position: Vector2.all(32), playerPath: playerHeloizaPath);
 
-    add(_player);
-    camera.followComponent(_player);
+    add(player);
+    camera.followComponent(player);
 
     movementJoystick = JoystickComponent(
       knob: CircleComponent(radius: 20, paint: knobMovementPaint),
@@ -55,6 +54,9 @@ class CaranaGame extends FlameGame with HasDraggables, HasTappables {
 
   Future _siginAnonymously() async {
     _auth = FirebaseAuth.instance;
+    if (_auth.currentUser != null) {
+      await _auth.signOut();
+    }
     try {
       await _auth.signInAnonymously();
     } catch (e) {

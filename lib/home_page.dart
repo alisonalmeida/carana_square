@@ -1,5 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:audioplayers/audioplayers.dart';
-import 'package:carana_square/carana_square.dart';
+import 'package:carana_square/actors.dart';
+import 'package:carana_square/hbgame.dart';
+import 'package:carana_square/consts.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,17 +41,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('HBGame'),
+      ),
       body: Center(
-        child: ElevatedButton(
-            onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GameWidget<CaranaGame>.controlled(
-                      loadingBuilder: (p0) =>
-                          Center(child: CircularProgressIndicator()),
-                      gameFactory: CaranaGame.new),
-                )),
-            child: Text('vai')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            //play with Heloiza
+            TextButton(
+                onPressed: () {
+                  Player player = Player(
+                      position: Vector2.all(32), playerPath: playerHeloizaPath);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return GameWidget(
+                          loadingBuilder: (p0) => Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          game: HBGame(player: player));
+                    },
+                  ));
+                },
+                child: Text('Jogar com Heloiza')), //play with Brenda
+            TextButton(
+                onPressed: () {
+                  Player player = Player(
+                      position: Vector2.all(32), playerPath: playerBrendaPath);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return GameWidget(
+                          loadingBuilder: (p0) => Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          game: HBGame(player: player));
+                    },
+                  ));
+                },
+                child: Text('Jogar com Brenda')),
+            TextButton(onPressed: () {}, child: Text('Jogar com Theo')),
+          ],
+        ),
       ),
     );
   }
