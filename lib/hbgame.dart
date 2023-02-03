@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HBGame extends FlameGame with HasDraggables, HasTappables {
   HBGame({required this.player});
@@ -20,6 +21,8 @@ class HBGame extends FlameGame with HasDraggables, HasTappables {
 
   @override
   Future<void> onLoad() async {
+    final database = FirebaseDatabase.instance.ref();
+    database.set({'player': 'teste'});
     await _siginAnonymously();
     final knobMovementPaint = BasicPalette.black.withAlpha(200).paint();
     final backgroundMovementPaint = BasicPalette.white.withAlpha(160).paint();

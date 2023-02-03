@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await Firebase.initializeApp(
@@ -14,10 +13,12 @@ Future<void> main() async {
   );
   await Flame.device.setLandscape();
 
-  
-
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: HomePage(),
+    theme: ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: Colors.green,
+    ),
   ));
 }
