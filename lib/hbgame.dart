@@ -1,17 +1,14 @@
 import 'package:carana_square/actors.dart';
 import 'package:carana_square/consts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class HBGame extends FlameGame with HasDraggables, HasTappables {
   HBGame({required this.player});
-  late FirebaseAuth _auth;
   Player player;
   late JoystickComponent movementJoystick;
   late JoystickComponent attackJoystick;
@@ -21,9 +18,6 @@ class HBGame extends FlameGame with HasDraggables, HasTappables {
 
   @override
   Future<void> onLoad() async {
-    final database = FirebaseDatabase.instance.ref();
-    database.set({'player': 'teste'});
-    await _siginAnonymously();
     final knobMovementPaint = BasicPalette.black.withAlpha(200).paint();
     final backgroundMovementPaint = BasicPalette.white.withAlpha(160).paint();
     final knobAttackPaint = BasicPalette.darkRed.withAlpha(200).paint();
@@ -53,17 +47,5 @@ class HBGame extends FlameGame with HasDraggables, HasTappables {
 
     add(movementJoystick);
     add(attackJoystick);
-  }
-
-  Future _siginAnonymously() async {
-    _auth = FirebaseAuth.instance;
-    if (_auth.currentUser != null) {
-      await _auth.signOut();
-    }
-    try {
-      await _auth.signInAnonymously();
-    } catch (e) {
-      print('erro');
-    }
   }
 }
