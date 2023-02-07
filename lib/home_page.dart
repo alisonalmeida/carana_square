@@ -2,6 +2,8 @@
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carana_square/actors.dart';
+import 'package:carana_square/connection/client.dart';
+import 'package:carana_square/connection/server.dart';
 import 'package:carana_square/hbgame.dart';
 import 'package:carana_square/consts.dart';
 import 'package:flame/game.dart';
@@ -25,17 +27,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future playAudio() async {
-    if (Platform.isWindows) {
-      String audioasset = 'assets/audio/intro_background_audio.ogg';
-      ByteData bytes = await rootBundle.load(audioasset);
+    /**
+     * String audioasset = 'assets/audio/intro_background_audio.ogg';
+    ByteData bytes = await rootBundle.load(audioasset);
 
-      AudioPlayer player = AudioPlayer();
+    AudioPlayer player = AudioPlayer();
 
-      Uint8List audiobytes =
-          bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+    Uint8List audiobytes =
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
 
-      await player.play(BytesSource(audiobytes));
-    }
+    await player.play(BytesSource(audiobytes));
+     */
   }
 
   @override
@@ -48,6 +50,17 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            ElevatedButton(
+                onPressed: () async {
+                  var v = ServerConnection();
+                  await v.init();
+                },
+                child: Text('Criar Jogo')),
+            ElevatedButton(
+                onPressed: () async {}, child: Text('Entrar no Jogo')),
+
+            /**
+             * 
             //play with Heloiza
             TextButton(
                 onPressed: () {
@@ -80,6 +93,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text('Jogar com Brenda')),
             TextButton(onPressed: () {}, child: Text('Jogar com Theo')),
+             */
           ],
         ),
       ),
