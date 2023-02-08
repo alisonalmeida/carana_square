@@ -55,9 +55,14 @@ class _HomePageState extends State<HomePage> {
                   var v = ServerConnection();
                   await v.init();
                 },
-                child: Text('Criar Jogo')),
+                child: Text('Criar')),
             ElevatedButton(
-                onPressed: () async {}, child: Text('Entrar no Jogo')),
+                onPressed: () async {
+                  var client = ClientConnection();
+                  await client.connect();
+                  
+                },
+                child: Text('Entrar')),
 
             /**
              * 
