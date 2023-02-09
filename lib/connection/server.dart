@@ -2,6 +2,7 @@
 
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:carana_square/core.dart';
 
 class ServerConnection {
   ServerConnection();
@@ -9,12 +10,20 @@ class ServerConnection {
   Future init() async {
     List<NetworkInterface> listNetworkInterface =
         await NetworkInterface.list(); //get list network connections
-    var selectedInterface =
-        listNetworkInterface.singleWhere((element) => element.name == 'wlan0');
+
+    NetworkInterface selectedInterface;
+    if (Platform.isAndroid) {
+      selectedInterface = listNetworkInterface
+          .singleWhere((element) => element.name == 'wlan0');
+    } else {
+      selectedInterface = listNetworkInterface
+          .singleWhere((element) => element.name == 'Ethernet');
+    }
+
     var localAddress = selectedInterface.addresses.first.address;
-    print(selectedInterface.addresses.first.address);
     // bind the socket server to an address and port
-    final server = await ServerSocket.bind(localAddress, 4567);
+    final server = await ServerSocket.bind(localAddress, portGameConnection);
+    print('server in: $localAddress');
 
     server.listen((client) {
       handleConnection(client);
@@ -28,18 +37,7 @@ class ServerConnection {
     // listen for events from the client
     client.listen(
       // handle data from the client
-      (Uint8List data) async {
-        await Future.delayed(Duration(seconds: 1));
-        final message = String.fromCharCodes(data);
-        if (message == 'Knock, knock.') {
-          client.write('Who is there?');
-        } else if (message.length < 10) {
-          client.write('$message who?');
-        } else {
-          client.write('Very funny.');
-          client.close();
-        }
-      },
+      (Uint8List data) async {},
 
       // handle errors
       onError: (error) {
