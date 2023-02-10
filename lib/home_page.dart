@@ -17,6 +17,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ServerPlayer player =
+      ServerPlayer(position: Vector2.all(32), playerPath: playerHeloizaPath);
+  ClientPlayer secondPlayer =
+      ClientPlayer(position: Vector2.all(32), playerPath: playerBrendaPath);
   @override
   void initState() {
     playAudio();
@@ -50,19 +54,16 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
                 onPressed: () async {
-                  var v = ServerConnection();
-                  await v.init();
+                  var serverConnection = ServerConnection();
+                  await serverConnection.init();
                   if (mounted) {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) {
-                        Player player = Player(
-                            position: Vector2.all(32),
-                            playerPath: playerHeloizaPath);
                         return GameWidget(
                             loadingBuilder: (p0) => Center(
                                   child: CircularProgressIndicator(),
                                 ),
-                            game: HBGame(player: player));
+                            game: HBGame(serverPlayer: player, serverConnection: serverConnection));
                       },
                     ));
                   }
@@ -71,23 +72,8 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
                 onPressed: () async {
                   var client = ClientConnection();
-                  var serverIp = await client.searchServer();
-                  await client.connect(serverIp);
-                  if (mounted) {
-                    print(playerBrendaPath);
-                    Player player = Player(
-                        position: Vector2.all(32),
-                        playerPath: playerBrendaPath);
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return GameWidget(
-                            loadingBuilder: (p0) => Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                            game: HBGame(player: player));
-                      },
-                    ));
-                  }
+                  await client.connect();
+                 
                 },
                 child: Text('Entrar')),
           ],

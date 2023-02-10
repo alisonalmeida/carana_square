@@ -1,4 +1,5 @@
 import 'package:carana_square/actors.dart';
+import 'package:carana_square/connection/server.dart';
 import 'package:carana_square/consts.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -8,13 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 class HBGame extends FlameGame with HasDraggables, HasTappables {
-  HBGame({required this.player});
-  Player player;
+  HBGame({required this.serverPlayer, required this.serverConnection});
+  ServerConnection serverConnection;
+  ServerPlayer serverPlayer;
   late JoystickComponent movementJoystick;
   late JoystickComponent attackJoystick;
   late TiledComponent homeMap;
   final Vector2 buttonSize = Vector2.all(50);
   late NotifyingVector2 gameSize;
+
+  Future addClientPlayer(ClientPlayer clientPlayer) async {
+    add(clientPlayer);
+  }
 
   @override
   Future<void> onLoad() async {
@@ -30,8 +36,9 @@ class HBGame extends FlameGame with HasDraggables, HasTappables {
 
     add(homeMap);
 
-    add(player);
-    camera.followComponent(player);
+    add(serverPlayer);
+
+    camera.followComponent(serverPlayer);
 
     movementJoystick = JoystickComponent(
       knob: CircleComponent(radius: 20, paint: knobMovementPaint),

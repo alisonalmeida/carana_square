@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:carana_square/core.dart';
 
 class ClientConnection {
   ClientConnection();
 
-  Future<String> searchServer() async {
+  Future connect() async {
+    String serverIp = '';
     List<NetworkInterface> listNetworkInterface =
         await NetworkInterface.list(); //get list network connections
     NetworkInterface selectedInterface;
@@ -19,24 +19,30 @@ class ClientConnection {
           .singleWhere((element) => element.name == 'Ethernet');
     }
     var localAddress = selectedInterface.addresses.first.address;
-    String serverIp = '';
     for (var i = 0; i < 255; i++) {
       var parts = localAddress.split('.');
       var ip = parts.take(parts.length - 1).join('.');
       try {
-        final socket = await Socket.connect('$ip.$i', portGameConnection,
-            timeout: Duration(milliseconds: 50));
+        await Socket.connect('$ip.$i', portGameConnection,
+            timeout: Duration(milliseconds: 100));
         serverIp = '$ip.$i';
-        await socket.close();
+
         break;
       } catch (e) {
         print(e);
       }
+      /**
+       * if (serverIp != '') {
+        var socket = await Socket.connect(serverIp, portGameConnection);
+        socket.listen((event) {
+          print(event);
+        });
+      }
+       */
     }
-    return serverIp;
   }
 
-  Future connect(String serverIp) async {
+  Future asd(String serverIp) async {
     /**
          * socket.listen(
           // handle data from the server
