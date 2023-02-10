@@ -12,6 +12,9 @@ class ServerConnection {
         await NetworkInterface.list(); //get list network connections
 
     NetworkInterface selectedInterface;
+
+    
+    
     if (Platform.isAndroid) {
       selectedInterface = listNetworkInterface
           .singleWhere((element) => element.name == 'wlan0');
@@ -23,7 +26,7 @@ class ServerConnection {
     var localAddress = selectedInterface.addresses.first.address;
     // bind the socket server to an address and port
     final server = await ServerSocket.bind(localAddress, portGameConnection);
-    print('server in: $localAddress');
+    print('server started in: $localAddress');
 
     server.listen((client) {
       handleConnection(client);
